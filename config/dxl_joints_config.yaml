@@ -1,0 +1,65 @@
+dxl_joints_config: [
+{ #motor model name: X54-200-S500-R, num: 54024
+    id: 1,
+    joint_name: rotation1_joint,
+    interface: Velocity,
+    init_vel: 0.0,
+    min_vel: 0.0,
+    direction: 1
+},
+
+{ #motor model name: X54-200-S500-R, num: 54024
+    id: 2,
+    joint_name: shoulder1_joint,
+    interface: Velocity,
+    init_vel: 0.0,
+    min_vel: 0.0,
+    direction: 1
+},
+
+{ #motor model name: X54-100-S500-R, num: 53768
+    id: 3,
+    joint_name: shoulder2_joint,
+    interface: Velocity,
+    init_vel: 0.,
+    min_vel: 0.,
+    direction: 1
+},
+
+{ #motor model name: X54-100-S500-R, num: 53768
+    id: 4,
+    joint_name: rotation2_joint,
+    interface: Velocity,
+    init_vel: 0.0,
+    min_vel: 0.0,
+    direction: 1
+},
+
+{ #motor model name: H42-20-S300-R, num: 51200
+    id: 5,
+    joint_name: shoulder3_joint,
+    interface: Velocity,
+    init_vel: 0.0,
+    min_vel: 0.0,
+    direction: 1
+},
+
+{ #motor model name: H42-20-S300-R, num: 51200
+    id: 6,
+    joint_name: wrist_joint,
+    interface: Velocity,
+    init_vel: 0.0,
+    min_vel: 0.0,
+    direction: 1
+},
+
+{ #motor model name: H42-20-S300-R, num: 51200
+    id: 20,
+    joint_name: gripper_joint,
+    interface: PosVel,
+    init_vel: 0.1,
+    min_vel: 0.1,
+    direction: 1
+}
+
+]

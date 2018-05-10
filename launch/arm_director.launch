@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="joy_dev" default="/dev/input/js0"/>
+
+    <!-- load joystick listener node -->
+    <node pkg="joy" type="joy_node" name="joy_listener">
+        <param name="dev" value="$(arg joy_dev)" />
+        <param name="deadzone" value="0.05" /><!-- relative to an axis normalized between -1 and 1 -->
+        <param name="autorepeat_rate" value="20" />
+    </node>
+
+    <node pkg="arm_director" type="arm_director_node" name="arm_director_node" output="screen">
+
+    <!--dxl motors-->
+            <param name="load_dxl_hw" value="true" />
+            <param name="dxl_port_name" value="/dev/USB2DYNAMIXEL" />
+            <param name="dxl_port_baudrate" value="1000000" />
+            <param name="dxl_protocol" value="2.0" />
+
+    </node>
+
+
+    <!-- load motors config files -->
+    <rosparam file="$(find arm_director)/config/dxl_joints_config.yaml" command="load"/>
+    <rosparam file="$(find dxl_interface)/config/dxl_spec_config.yaml" command="load"/>
+
+
+</launch>
