@@ -37,51 +37,51 @@
 
 // ************* ROTATION1 ************
 #define ROTATION1_ID 1
-#define ROTATION1_MAX_VEL 0.2
-#define ROTATION1_MAX_POS M_PI / 2
-#define ROTATION1_MIN_POS -M_PI / 2
+#define ROTATION1_MAX_VEL 0.5
+#define ROTATION1_MAX_POS M_PI / 4
+#define ROTATION1_MIN_POS -M_PI / 4
 #define ROTATION1_AXIS 2
 
 // ************* SHOULDER1 ************
 #define SHOULDER1_ID 2
-#define SHOULDER1_MAX_VEL 0.2
-#define SHOULDER1_MAX_POS M_PI / 2
-#define SHOULDER1_MIN_POS -M_PI / 2
+#define SHOULDER1_MAX_VEL 0.5
+#define SHOULDER1_MAX_POS M_PI / 4
+#define SHOULDER1_MIN_POS -M_PI / 4
 #define SHOULDER1_AXIS 3
 
 // ************* SHOULDER2 ************
 #define SHOULDER2_ID 3
-#define SHOULDER2_MAX_VEL 0.2
-#define SHOULDER2_MAX_POS M_PI / 2
-#define SHOULDER2_MIN_POS -M_PI / 2
+#define SHOULDER2_MAX_VEL 0.5
+#define SHOULDER2_MAX_POS M_PI / 4
+#define SHOULDER2_MIN_POS -M_PI / 4
 #define SHOULDER2_AXIS 3
 
 // ************* ROTATION2 ************
 #define ROTATION2_ID 4
-#define ROTATION2_MAX_VEL 0.2
-#define ROTATION2_MAX_POS M_PI / 2
-#define ROTATION2_MIN_POS -M_PI / 2
+#define ROTATION2_MAX_VEL 0.5
+#define ROTATION2_MAX_POS M_PI / 4
+#define ROTATION2_MIN_POS -M_PI / 4
 #define ROTATION2_AXIS 2
 
 // ************* SHOULDER3 ************
 #define SHOULDER3_ID 5
-#define SHOULDER3_MAX_VEL 0.2
-#define SHOULDER3_MAX_POS M_PI / 2
-#define SHOULDER3_MIN_POS -M_PI / 2
+#define SHOULDER3_MAX_VEL 0.5
+#define SHOULDER3_MAX_POS M_PI / 4
+#define SHOULDER3_MIN_POS -M_PI / 4
 #define SHOULDER3_AXIS 1
 
 // ************* WRIST ************
 #define WRIST_ID 6
-#define WRIST_MAX_VEL 0.2
-#define WRIST_MAX_POS M_PI / 2
-#define WRIST_MIN_POS -M_PI / 2
+#define WRIST_MAX_VEL 0.5
+#define WRIST_MAX_POS M_PI / 4
+#define WRIST_MIN_POS -M_PI / 4
 #define WRIST_AXIS  0
 
 
 // ************* GRIPPER ************
 #define GRIPPER_ID 20
-#define GRIPPER_MAX_VEL 0.2
-#define GRIPPER_MAX_POS 0.109
+#define GRIPPER_MAX_VEL 0.5
+#define GRIPPER_MAX_POS 0.100 //0.109
 #define GRIPPER_MIN_POS 0
 #define GRIPPER_OPEN_AXIS  4
 #define GRIPPER_CLOSE_AXIS  5
@@ -102,18 +102,18 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
     {
         // shoulder 3
         dxl::motor shoulder3;
-        motors->getMotor(SHOULDER3_AXIS, shoulder3);
+        motors->getMotor(SHOULDER3_ID, shoulder3);
 
         double shoulder3_vel_cmd = joy_msg->axes[SHOULDER3_AXIS] * SHOULDER3_MAX_VEL;
 
         if (shoulder3.position >= SHOULDER3_MAX_POS && shoulder3_vel_cmd > 0)
         {
-            std::cout << "shoulder3 reached max pos limit" << std::endl;
+            ROS_WARN("shoulder3 reached max pos limit: %f", shoulder3.position * 180 / M_PI);
             shoulder3_vel_cmd = 0;
         }
         else if (shoulder3.position <= SHOULDER3_MIN_POS && shoulder3_vel_cmd < 0)
         {
-            std::cout << "shoulder3 reached min pos limit" << std::endl;
+            ROS_WARN("shoulder3 reached min pos limit: %f", shoulder3.position * 180 / M_PI);
             shoulder3_vel_cmd = 0;
         }
 
@@ -128,12 +128,14 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
         if (wrist.position >= WRIST_MAX_POS && wrist_vel_cmd > 0)
         {
-            std::cout << "reached max pos limit" << std::endl;
+            ROS_WARN("wrist reached max pos limit: %f", wrist.position * 180 / M_PI);
+
             wrist_vel_cmd = 0;
         }
         else if (wrist.position <= WRIST_MIN_POS && wrist_vel_cmd < 0)
         {
-            std::cout << "reached min pos limit" << std::endl;
+            ROS_WARN("wrist reached min pos limit: %f", wrist.position * 180 / M_PI);
+
             wrist_vel_cmd = 0;
         }
         motors->setMotorVelocity(WRIST_ID, wrist_vel_cmd);
@@ -146,12 +148,14 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
         if (rotation2.position >= ROTATION2_MAX_POS && rotation2_vel_cmd > 0)
         {
-            std::cout << "rotation2 reached max pos limit" << std::endl;
+            ROS_WARN("rotation2 reached max pos limit: %f", rotation2.position * 180 / M_PI);
+
             rotation2_vel_cmd = 0;
         }
         else if (rotation2.position <= ROTATION2_MIN_POS && rotation2_vel_cmd < 0)
         {
-            std::cout << "rotation2 reached min pos limit" << std::endl;
+            ROS_WARN("rotation2 reached min pos limit: %f", rotation2.position * 180 / M_PI);
+
             rotation2_vel_cmd = 0;
         }
 
@@ -166,22 +170,40 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
         if (shoulder2.position >= SHOULDER2_MAX_POS && shoulder2_vel_cmd > 0)
         {
-            std::cout << "shoulder2 reached max pos limit" << std::endl;
+            ROS_WARN("shoulder2 reached max pos limit: %f", shoulder2.position * 180 / M_PI);
             shoulder2_vel_cmd = 0;
         }
         else if (shoulder2.position <= SHOULDER2_MIN_POS && shoulder2_vel_cmd < 0)
         {
-            std::cout << "shoulder2 reached min pos limit" << std::endl;
+            ROS_WARN("shoulder2 reached min limit: %f", shoulder2.position * 180 / M_PI);
             shoulder2_vel_cmd = 0;
         }
 
+
+        // example of rebooting motor
+        if (joy_msg->buttons[3])
+        {
+            ROS_WARN("REBOOTING");
+            if (motors->rebootMotor(ROTATION1_ID))
+            {
+                ros::Duration(0.1).sleep(); // must wait some time until motor is back to life
+
+                if (motors->setMotorTorque(ROTATION1_ID, true))
+                {
+                    ROS_INFO("MOTOR TORQUE SUCCESS");
+
+                }
+                else
+                {
+                    ROS_INFO("MOTOR TORQUE FAILED");
+
+                }
+            }
+
+
+        }
+
         motors->setMotorVelocity(SHOULDER2_ID, shoulder2_vel_cmd);
-
-
-
-
-
-
 
         motors->setMotorVelocity(SHOULDER1_ID, 0);
         motors->setMotorVelocity(ROTATION1_ID, 0);
@@ -197,17 +219,16 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
         if (rotation1.position >= ROTATION1_MAX_POS && rotation1_vel_cmd > 0)
         {
-            std::cout << "rostation1 reached max pos limit" << std::endl;
+            ROS_WARN("rotation1 reached max limit: %f", rotation1.position * 180 / M_PI);
             rotation1_vel_cmd = 0;
         }
         else if (rotation1.position <= ROTATION1_MIN_POS && rotation1_vel_cmd < 0)
         {
-            std::cout << "rostation1 reached min pos limit" << std::endl;
+            ROS_WARN("rotation1 reached min limit: %f", rotation1.position * 180 / M_PI);
             rotation1_vel_cmd = 0;
         }
 
         motors->setMotorVelocity(ROTATION1_ID, rotation1_vel_cmd);
-
 
         // shoulder1
         dxl::motor shoulder1;
@@ -217,22 +238,16 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
         if (shoulder1.position >= SHOULDER1_MAX_POS && shoulder1_vel_cmd > 0)
         {
-            std::cout << "shoulder1 reached max pos limit" << std::endl;
+            ROS_WARN("shoulder1 reached max limit: %f", shoulder1.position * 180 / M_PI);
             shoulder1_vel_cmd = 0;
         }
         else if (shoulder1.position <= SHOULDER1_MIN_POS && shoulder1_vel_cmd < 0)
         {
-            std::cout << "shoulder1 reached min pos limit" << std::endl;
+            ROS_WARN("shoulder1 reached min limit: %f", shoulder1.position * 180 / M_PI);
             shoulder1_vel_cmd = 0;
         }
 
         motors->setMotorVelocity(SHOULDER1_ID, shoulder1_vel_cmd);
-
-
-
-
-
-
 
         motors->setMotorVelocity(SHOULDER2_ID, 0);
         motors->setMotorVelocity(ROTATION2_ID, 0);
@@ -250,12 +265,6 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
         motors->setMotorVelocity(SHOULDER3_ID, 0);
     }
 
-
-
-
-
-
-
     // gripper
     dxl::motor gripper;
     motors->getMotor(GRIPPER_ID, gripper);
@@ -269,19 +278,18 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
     if (gripper.position >= GRIPPER_MAX_POS && gripper_pos_cmd > gripper.position)
     {
-        std::cout << "gripper reached max pos limit" << std::endl;
+        ROS_WARN("gripper reached max limit: %f", gripper.position * 180 / M_PI);
         gripper_pos_cmd = GRIPPER_MAX_POS;
     }
     else if (gripper.position <= GRIPPER_MIN_POS && gripper_pos_cmd < gripper.position)
     {
-        std::cout << "gripper reached min pos limit" << std::endl;
+        ROS_WARN("gripper reached min limit: %f", gripper.position * 180 / M_PI);
         gripper_pos_cmd = GRIPPER_MIN_POS;
     }
 
     motors->setMotorPosition(GRIPPER_ID, gripper_pos_cmd);
 
     //ROS_INFO("VEL %f, POS %f", wrist_vel_cmd * 180 / M_PI, motor.position * 180 / M_PI);
-
 
 
 }
@@ -305,8 +313,8 @@ int main(int argc, char** argv)
     motors_builder.read();
 
 
-    motors_builder.setMotorPosition(20, 0.05);
-    motors_builder.setMotorVelocity(20, 0.1);
+    motors_builder.setMotorPosition(GRIPPER_ID, 0.05);
+    motors_builder.setMotorVelocity(GRIPPER_ID, 0.1);
 
     gripper_pos_cmd = 0.05;
 
@@ -314,24 +322,12 @@ int main(int argc, char** argv)
 
     while (ros::ok())
     {
-// read all motors state
+        // read all motors state
         motors_builder.read();
 
-
-
-
-
-        // ROS_INFO("pos: %f.2, vel: %f.2", motor.position, motor.velocity);
         // sleep shortly between read and write to prevent
         // motor communication errors
         rate2.sleep();
-
-        // set motors commands by hand. If ROS controller is available,
-        // use registerHandles() function on startup, and replace next
-        // 2 lines with contoller_manager.update()
-
-
-
 
         // write commands to motors
         motors_builder.write();
@@ -344,8 +340,14 @@ int main(int argc, char** argv)
     }
 
 
-    // on exit
-    //motors_builder.setMotorVelocity(0, 0);
+    // on exit set all motors to 0 as safety measure
+    motors_builder.setMotorVelocity(ROTATION1_ID, 0);
+    motors_builder.setMotorVelocity(SHOULDER1_AXIS, 0);
+    motors_builder.setMotorVelocity(SHOULDER2_AXIS, 0);
+    motors_builder.setMotorVelocity(ROTATION2_ID, 0);
+    motors_builder.setMotorVelocity(SHOULDER3_AXIS, 0);
+    motors_builder.setMotorVelocity(WRIST_ID, 0);
+    motors_builder.setMotorVelocity(GRIPPER_ID, 0);
 
     return 0;
 }

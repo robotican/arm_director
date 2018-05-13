@@ -21,8 +21,8 @@ dxl_joints_config: [
     id: 3,
     joint_name: shoulder2_joint,
     interface: Velocity,
-    init_vel: 0.,
-    min_vel: 0.,
+    init_vel: 0.0,
+    min_vel: 0.0,
     direction: 1
 },
 
