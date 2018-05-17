@@ -53,7 +53,7 @@ dxl_joints_config: [
     direction: 1
 },
 
-{ #motor model name: H42-20-S300-R, num: 51200
+{ #motor model name: RH-P12-RN, num: 35073
     id: 20,
     joint_name: gripper_joint,
     interface: PosVel,

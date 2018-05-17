@@ -31,7 +31,7 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
-#include <dxl_interface/dxl_motor_builder.h>
+#include <dxl_interface/motors_builder.h>
 
 #define LOOP_HZ 100.0
 
@@ -92,7 +92,7 @@
 #define ROUGH_BTN 7
 
 
-dxl::DxlMotorsBuilder *motors;
+dxl::MotorsBuilder *motors;
 
 double gripper_pos_cmd = 0;
 
@@ -101,7 +101,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
     if (joy_msg->buttons[FINE_BTN] && !joy_msg->buttons[ROUGH_BTN])
     {
         // shoulder 3
-        dxl::motor shoulder3;
+        dxl::Motor shoulder3;
         motors->getMotor(SHOULDER3_ID, shoulder3);
 
         double shoulder3_vel_cmd = joy_msg->axes[SHOULDER3_AXIS] * SHOULDER3_MAX_VEL;
@@ -121,7 +121,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
 
         // wrist
-        dxl::motor wrist;
+        dxl::Motor wrist;
         motors->getMotor(WRIST_ID, wrist);
 
         double wrist_vel_cmd = joy_msg->axes[WRIST_AXIS] * WRIST_MAX_VEL;
@@ -141,7 +141,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
         motors->setMotorVelocity(WRIST_ID, wrist_vel_cmd);
 
         // rotation 2
-        dxl::motor rotation2;
+        dxl::Motor rotation2;
         motors->getMotor(ROTATION2_ID, rotation2);
 
         double rotation2_vel_cmd = joy_msg->axes[ROTATION2_AXIS] * ROTATION2_MAX_VEL;
@@ -163,7 +163,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
 
 
         // shoulder2
-        dxl::motor shoulder2;
+        dxl::Motor shoulder2;
         motors->getMotor(SHOULDER2_ID, shoulder2);
 
         double shoulder2_vel_cmd = joy_msg->axes[SHOULDER2_AXIS] * SHOULDER2_MAX_VEL;
@@ -191,16 +191,12 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
                 if (motors->setMotorTorque(ROTATION1_ID, true))
                 {
                     ROS_INFO("MOTOR TORQUE SUCCESS");
-
                 }
                 else
                 {
                     ROS_INFO("MOTOR TORQUE FAILED");
-
                 }
             }
-
-
         }
 
         motors->setMotorVelocity(SHOULDER2_ID, shoulder2_vel_cmd);
@@ -212,7 +208,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
     else if(!joy_msg->buttons[FINE_BTN] && joy_msg->buttons[ROUGH_BTN])
     {
         // rostation1
-        dxl::motor rotation1;
+        dxl::Motor rotation1;
         motors->getMotor(ROTATION1_ID, rotation1);
 
         double rotation1_vel_cmd = joy_msg->axes[ROTATION1_AXIS] * ROTATION1_MAX_VEL;
@@ -231,7 +227,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
         motors->setMotorVelocity(ROTATION1_ID, rotation1_vel_cmd);
 
         // shoulder1
-        dxl::motor shoulder1;
+        dxl::Motor shoulder1;
         motors->getMotor(SHOULDER1_ID, shoulder1);
 
         double shoulder1_vel_cmd = joy_msg->axes[SHOULDER1_AXIS] * SHOULDER1_MAX_VEL;
@@ -266,7 +262,7 @@ void joyCallback(const sensor_msgs::Joy::ConstPtr& joy_msg)
     }
 
     // gripper
-    dxl::motor gripper;
+    dxl::Motor gripper;
     motors->getMotor(GRIPPER_ID, gripper);
 
 
@@ -302,7 +298,7 @@ int main(int argc, char** argv)
     ros::Subscriber joy_sub_ = nh.subscribe<sensor_msgs::Joy>("joy", 10, joyCallback);
 
 
-    dxl::DxlMotorsBuilder motors_builder(nh);
+    dxl::MotorsBuilder motors_builder(nh);
 
     motors = &motors_builder;
 
